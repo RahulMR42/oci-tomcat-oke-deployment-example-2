@@ -58,7 +58,8 @@ steps:
     command: |
       cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
       export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
-      docker build --pull --rm -t maven-tomcat-example:${BUILDRUN_HASH} .
+      docker build --pull --rm -t maven-tomcat-example:${BUILDRUN_HASH} -t maven-tomcat-example:latest .
+      
 
 
 outputArtifacts:
@@ -72,6 +73,4 @@ outputArtifacts:
     # this location tag doesn't effect the tag used to deliver the container image
     # to the Container Registry.
     # the tag can be customized too
-    command: |
-      export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
-    location: maven-tomcat-example:${BUILDRUN_HASH}
+    location: maven-tomcat-example:latest
