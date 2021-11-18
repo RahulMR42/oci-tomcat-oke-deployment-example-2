@@ -1,0 +1,73 @@
+version: 0.1
+component: build
+timeoutInSeconds: 6000
+runAs: root
+shell: bash
+env:
+  # these are local variables to the build config
+  variables:
+    key: "value"
+
+  # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
+  # you can then access the value of that secret in your build_spec.yaml commands
+  vaultVariables:
+  #  EXAMPLE_SECRET: "YOUR-SECRET-OCID"
+  
+  # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
+  # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
+  exportedVariables:
+    - BUILDRUN_HASH
+
+steps:
+  - type: Command
+    name: "Define unique image tag"
+    timeoutInSeconds: 40
+    command: |
+      export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
+      echo "BUILDRUN_HASH: " $BUILDRUN_HASH
+
+  - type: Command
+    timeoutInSeconds: 600
+    name: "Install JDK11"
+    command: |
+      cd /tmp
+      wget -nv https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
+      tar -xf openjdk-11+28_linux-x64_bin.tar.gz
+      export JAVA_HOME=/tmp/jdk-11
+      export PATH=/tmp/jdk-11/bin:$PATH
+      java -version
+    onFailure:
+      - type: Command
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 40
+        runAs: root
+  
+  - type: Command
+    timeoutInSeconds: 600
+    name: "Maven install"
+    command: |
+      cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
+      mvn clean install
+      mvn package
+
+  - type: Command
+    timeoutInSeconds: 600
+    name: "Create container image"
+    command: |
+      cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
+      docker build --pull --rm -t maven-tomcat-example .
+
+
+outputArtifacts:
+  - name: output01
+    type: BINARY
+    # built java archive, in case we need it
+    location: ${OCI_WORKSPACE_DIR}/maven-tomcat-example/target/demo.war
+  - name: output02
+    type: DOCKER_IMAGE
+    # this is only the locally exported container image name
+    # this location tag doesn't effect the tag used to deliver the container image
+    # to the Container Registry.
+    location: maven-tomcat-example:latest
