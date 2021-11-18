@@ -72,4 +72,6 @@ outputArtifacts:
     # this location tag doesn't effect the tag used to deliver the container image
     # to the Container Registry.
     # the tag can be customized too
+    command: |
+      export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
     location: maven-tomcat-example:${BUILDRUN_HASH}
