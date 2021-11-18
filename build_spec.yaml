@@ -71,5 +71,5 @@ outputArtifacts:
     # this is only the locally exported container image name
     # this location tag doesn't effect the tag used to deliver the container image
     # to the Container Registry.
-    # the tag can be customized too
-    location: maven-tomcat-example:`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
+    # At this stage location does not support an exported variable!
+    location: maven-tomcat-example:latest
