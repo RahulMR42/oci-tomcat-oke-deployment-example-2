@@ -57,7 +57,7 @@ steps:
     name: "Create container image"
     command: |
       cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
-      docker build --pull --rm -t maven-tomcat-example:${BUILDRUN_HASH} -t maven-tomcat-example:latest .
+      docker build --pull --rm -t maven-tomcat-example .
       
 
 outputArtifacts:
@@ -70,5 +70,4 @@ outputArtifacts:
     # this is only the locally exported container image name
     # this location tag doesn't effect the tag used to deliver the container image
     # to the Container Registry.
-    # At this stage location does not support an exported variable!
     location: maven-tomcat-example:latest
