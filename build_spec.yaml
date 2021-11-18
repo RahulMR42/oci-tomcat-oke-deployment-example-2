@@ -57,17 +57,18 @@ steps:
     name: "Create container image"
     command: |
       cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
-      docker build --pull --rm -t maven-tomcat-example .
+      docker build --pull --rm -t maven-tomcat-example:${BUILDRUN_HASH} .
 
 
 outputArtifacts:
-  - name: output01
+  - name: output_java_archive
     type: BINARY
     # built java archive, in case we need it
     location: ${OCI_WORKSPACE_DIR}/maven-tomcat-example/target/demo.war
-  - name: output02
+  - name: output_docker_image_tagged
     type: DOCKER_IMAGE
     # this is only the locally exported container image name
     # this location tag doesn't effect the tag used to deliver the container image
     # to the Container Registry.
-    location: maven-tomcat-example:latest
+    # the tag can be customized too
+    location: maven-tomcat-example:${BUILDRUN_HASH}
