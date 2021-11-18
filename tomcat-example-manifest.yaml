@@ -21,7 +21,7 @@ spec:
       containers:
         - name: tomcat-example
           # enter the path to your image, be sure to include the correct region prefix
-          image: iad.ocir.io/odx-pipelines/js-test/maven-tomcat-example:${BUILDRUN_HASH}
+          image: us-ashburn-1.ocir.io/fahdabidiroottenancy/rahul/mr-devops/tomcat-java-container-image:${BUILDRUN_HASH}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
