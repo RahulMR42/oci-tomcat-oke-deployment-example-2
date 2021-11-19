@@ -13,8 +13,8 @@ env:
 
 
   vaultVariables:
-    OCIR_DOCKER_PWD: ${OCIR_DOCKER_PWD}
-    OCIR_DOCKER_USER: ${OCIR_DOCKER_USER}
+    OCIR_DOCKER_PWD_VAULT: ${OCIR_DOCKER_PWD}
+    OCIR_DOCKER_USER_VAULT: ${OCIR_DOCKER_USER}
 
  
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
@@ -71,7 +71,7 @@ steps:
     runAs: root          
     command: |
       # do docker login
-      echo ${OCIR_DOCKER_PWD} | docker login ${OCIR_DOCKER_URL} -u ${OCIR_DOCKER_USER} --password-stdin
+      echo ${OCIR_DOCKER_PWD_VAULT} | docker login ${OCIR_DOCKER_URL} -u ${OCIR_DOCKER_USER_VAULT} --password-stdin
       DOCKER_CONFIG_JSON=`cat ~/.docker/config.json | base64`
 
       
