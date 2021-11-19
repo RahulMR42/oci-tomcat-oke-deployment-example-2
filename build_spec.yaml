@@ -9,6 +9,7 @@ env:
     key: "value"
     OCIR_DOCKER_PWD: ${OCIR_DOCKER_PWD}
     OCIR_DOCKER_USER: ${OCIR_DOCKER_USER}
+    OCIR_DOCKER_URL: ${OCIR_DOCKER_URL}
 
 
   vaultVariables:
