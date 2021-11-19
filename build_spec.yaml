@@ -7,6 +7,9 @@ env:
   # these are local variables to the build config
   variables:
     key: "value"
+    OCIR_DOCKER_PWD: ${OCIR_DOCKER_PWD}
+    OCIR_DOCKER_USER: ${OCIR_DOCKER_USER}
+
 
   vaultVariables:
     OCIR_DOCKER_PWD: ${OCIR_DOCKER_PWD}
