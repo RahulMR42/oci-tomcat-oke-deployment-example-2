@@ -8,6 +8,10 @@ env:
   variables:
     key: "value"
 
+  vaultVariables:
+    OCIR_DOCKER_PWD: ${OCIR_DOCKER_PWD}
+    OCIR_DOCKER_USER: ${OCIR_DOCKER_USER}
+
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
   vaultVariables:
@@ -17,6 +21,7 @@ env:
   # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
     - BUILDRUN_HASH
+    - DOCKER_CONFIG_JSON
 
 steps:
   - type: Command
@@ -58,6 +63,17 @@ steps:
     command: |
       cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
       docker build --pull --rm -t maven-tomcat-example .
+
+  - type: Command                   
+    name: "Login to OCIR"  
+    shell: bash                    
+    timeoutInSeconds: 60           
+    runAs: root          
+    command: |
+    # do docker login
+      echo ${OCIR_DOCKER_PWD} | docker login ${OCIR_DOCKER_URL} -u ${OCIR_DOCKER_USER} --password-stdin
+      DOCKER_CONFIG_JSON=`cat ~/.docker/config.json | base64`
+
       
 
 outputArtifacts:
