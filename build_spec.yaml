@@ -12,11 +12,7 @@ env:
     OCIR_DOCKER_PWD: ${OCIR_DOCKER_PWD}
     OCIR_DOCKER_USER: ${OCIR_DOCKER_USER}
 
-  # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
-  # you can then access the value of that secret in your build_spec.yaml commands
-  vaultVariables:
-  #  EXAMPLE_SECRET: "YOUR-SECRET-OCID"
-  
+ 
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
@@ -70,7 +66,7 @@ steps:
     timeoutInSeconds: 60           
     runAs: root          
     command: |
-    # do docker login
+      # do docker login
       echo ${OCIR_DOCKER_PWD} | docker login ${OCIR_DOCKER_URL} -u ${OCIR_DOCKER_USER} --password-stdin
       DOCKER_CONFIG_JSON=`cat ~/.docker/config.json | base64`
 
