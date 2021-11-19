@@ -18,7 +18,7 @@ env:
   # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
     - BUILDRUN_HASH
-    - DOCKER_CONFIG_JSON
+    #- DOCKER_CONFIG_JSON
 
 steps:
   - type: Command
