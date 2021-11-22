@@ -18,8 +18,8 @@ env:
   exportedVariables:
     - BUILDRUN_HASH
     - DOCKER_REGISTRY
-    - DOCKER_USERNAME
-    - DOCKER_AUTH_TOKEN
+    # - DOCKER_USERNAME
+    # - DOCKER_AUTH_TOKEN
 
 steps:
   - type: Command
