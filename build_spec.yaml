@@ -6,19 +6,20 @@ shell: bash
 env:
   # these are local variables to the build config
   variables:
-    key: "value"
-    OCIR_DOCKER_URL: ${OCIR_DOCKER_URL}
+    DOCKER_REGISTRY: ${OCIR_DOCKER_URL}
 
   vaultVariables:
-    OCIR_DOCKER_PWD_VAULT: "ocid1.vaultsecret.oc1.iad.<Your values>"
-    OCIR_DOCKER_USER_VAULT: "ocid1.vaultsecret.oc1.iad.<Your values>"
+    DOCKER_USERNAME: "ocid1.vaultsecret.oc1.iad.amaaaaaak56z2vqas5c7nmkun6xlnqwiqpyza47vl3dcqnz3nuedm37ks65q"
+    OCI_AUTH_TOKEN: "ocid1.vaultsecret.oc1.iad.amaaaaaak56z2vqabxmvlihncrvm64jlfa3nd7osv6k23a2udnr5fdoe7noa"
 
  
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
     - BUILDRUN_HASH
-    #- DOCKER_CONFIG_JSON (Commented purposefully as deployment pipeline can't take more than 255 chars)
+    - DOCKER_REGISTRY
+    - DOCKER_USERNAME
+    - OCI_AUTH_TOKEN
 
 steps:
   - type: Command
@@ -60,18 +61,7 @@ steps:
     command: |
       cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
       docker build --pull --rm -t maven-tomcat-example .
-
-  - type: Command                   
-    name: "Login to OCIR"  
-    shell: bash                    
-    timeoutInSeconds: 60           
-    runAs: root          
-    command: |
-      # do docker login
-      echo ${OCIR_DOCKER_PWD_VAULT} | docker login ${OCIR_DOCKER_URL} -u ${OCIR_DOCKER_USER_VAULT} --password-stdin
-      DOCKER_CONFIG_JSON=`cat ~/.docker/config.json | base64|xargs`
-
-      
+    
 
 outputArtifacts:
   - name: output_java_archive

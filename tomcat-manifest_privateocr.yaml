@@ -4,6 +4,15 @@ metadata:
   name: ${namespace_canary}
 ---
 apiVersion: v1
+kind: Secret
+type: kubernetes.io/dockerconfigjson
+metadata:
+  namespace: ${namespace_canary}
+  name: ocr-credentials
+stringData:
+  .dockerconfigjson: '{"auths":{"$DOCKER_REGISTRY":{"username":"$DOCKER_USERNAME","password":"$OCI_AUTH_TOKEN","auth":"base64($DOCKER_USERNAME:$OCI_AUTH_TOKEN)"}}}'
+---
+apiVersion: v1
 data:
   .dockerconfigjson: <base 64 of ~/.docker/config.json>
 kind: Secret
