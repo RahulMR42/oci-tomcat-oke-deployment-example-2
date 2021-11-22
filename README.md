@@ -30,5 +30,13 @@ Now lets add the admin user to Tomcat. In your `tomcat-users.xml` configuration 
 
 ### Lets go!
 Start tomcat: `catalina run`
-
 Publish your example war to tomcat: `mvn tomcat7:deploy`
+
+Procedure to run the same via Oracle Cloud Infrastrecture Devops Build and deploy services.
+-----------------------
+
+- [Build spec file](build_spec.yaml) 
+
+
+
+

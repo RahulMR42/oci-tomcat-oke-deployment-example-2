@@ -10,7 +10,7 @@ metadata:
   namespace: ${namespace_canary}
   name: ocr-credentials
 stringData:
-  .dockerconfigjson: '{"auths":{"$DOCKER_REGISTRY":{"username":"$DOCKER_USERNAME","password":"$DOCKER_AUTH_TOKEN","auth":"base64($DOCKER_USERNAME:$DOCKER_AUTH_TOKEN)"}}}'
+  .dockerconfigjson: <base 64 of docker Config>
 ---
 apiVersion: v1
 data:

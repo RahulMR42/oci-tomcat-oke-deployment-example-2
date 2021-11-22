@@ -17,9 +17,7 @@ env:
   # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
     - BUILDRUN_HASH
-    - DOCKER_REGISTRY
-    # - DOCKER_USERNAME
-    # - DOCKER_AUTH_TOKEN
+ 
 
 steps:
   - type: Command
@@ -61,7 +59,19 @@ steps:
     command: |
       cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
       docker build --pull --rm -t maven-tomcat-example .
-    
+  
+  - type: Command                   
+    name: "Login to OCIR"  
+    shell: bash                    
+    timeoutInSeconds: 60           
+    runAs: root          
+    command: |
+      # do docker login
+      echo ${DOCKER_AUTH_TOKEN} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_USERNAME} --password-stdin
+      DOCKER_CONFIG_JSON=`cat ~/.docker/config.json | base64|xargs`
+      
+  # It is not possible to parse any value more than 255 chars between build and deployment pipeline ,so for an easy way it can be used as a file to artifact and call directly from the deployment side. 
+
 
 outputArtifacts:
   - name: output_java_archive
@@ -74,3 +84,4 @@ outputArtifacts:
     # this location tag doesn't effect the tag used to deliver the container image
     # to the Container Registry.
     location: maven-tomcat-example:latest
+  
