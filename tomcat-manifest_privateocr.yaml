@@ -12,15 +12,6 @@ metadata:
 stringData:
   .dockercfg: <Base64 of docker config>
 ---
-apiVersion: v1
-data:
-  .dockerconfigjson: <base 64 of ~/.docker/config.json>
-kind: Secret
-metadata:
-  namespace: ${namespace_canary}
-  name: ocr-credentials
-type: kubernetes.io/dockerconfigjson
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
