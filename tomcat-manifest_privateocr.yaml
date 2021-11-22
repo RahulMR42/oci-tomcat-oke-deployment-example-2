@@ -5,12 +5,12 @@ metadata:
 ---
 apiVersion: v1
 kind: Secret
-type: kubernetes.io/dockerconfig
+type: kubernetes.io/dockercfg
 metadata:
   namespace: ${namespace_canary}
   name: ocr-credentials
 stringData:
-  .dockercfg: <Base 64 of dockerconfig>
+  .dockercfg: <Base64 of docker config>
 ---
 apiVersion: v1
 data:
