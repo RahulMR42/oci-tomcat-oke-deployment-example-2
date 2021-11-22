@@ -33,10 +33,19 @@ Start tomcat: `catalina run`
 Publish your example war to tomcat: `mvn tomcat7:deploy`
 
 Procedure to run the same via Oracle Cloud Infrastrecture Devops Build and deploy services.
------------------------
 
-- [Build spec file](build_spec.yaml) 
+---------------------------------
 
+Config files.
+
+- [build_spec.yaml](build_spec.yaml) contains the various tages of build.
+
+- [tomcat-example-manifest.yaml](tomcat-example-manifest.yaml) contains OKE manifest to deploy using public repositories.
+- [tomcat-manifest_privateocr.yaml](tomcat-manifest_privateocr.yaml) contains OKE manifest to deploy using a private docker repo.  
+
+Documentation
+
+- https://docs.oracle.com/en-us/iaas/Content/devops/using/home.htm 
 
 
 
