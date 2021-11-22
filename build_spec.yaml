@@ -9,8 +9,8 @@ env:
     DOCKER_REGISTRY: ${OCIR_DOCKER_URL}
 
   vaultVariables:
-    DOCKER_USERNAME: "ocid1.vaultsecret.oc1.iad.amaaaaaak56z2vqas5c7nmkun6xlnqwiqpyza47vl3dcqnz3nuedm37ks65q"
-    OCI_AUTH_TOKEN: "ocid1.vaultsecret.oc1.iad.amaaaaaak56z2vqabxmvlihncrvm64jlfa3nd7osv6k23a2udnr5fdoe7noa"
+    DOCKER_USERNAME: "ocid1.vaultsecret.oc1.iad.xx"
+    OCI_AUTH_TOKEN: "ocid1.vaultsecret.oc1.iad.xx"
 
  
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
