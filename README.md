@@ -39,8 +39,6 @@ Procedure to run the same via Oracle Cloud Infrastrecture Devops Build and deplo
 Config files.
 
 - [build_spec.yaml](build_spec.yaml) contains the various tages of build.
-
-- [tomcat-example-manifest.yaml](tomcat-example-manifest.yaml) contains OKE manifest to deploy using public repositories.
 - [tomcat-manifest_privateocr.yaml](tomcat-manifest_privateocr.yaml) contains OKE manifest to deploy using a private docker repo.  
 
 Documentation

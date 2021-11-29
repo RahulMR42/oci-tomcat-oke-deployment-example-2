@@ -6,26 +6,32 @@ shell: bash
 env:
   # these are local variables to the build config
   variables:
-    DOCKER_REGISTRY: ${OCIR_DOCKER_URL}
+    DOCKER_URL_PARAM: ${OCIR_DOCKER_URL}
 
   vaultVariables:
-    DOCKER_USERNAME: "ocid1.vaultsecret.oc1.iad.<ID of the secrets>"
-    DOCKER_AUTH_TOKEN: "ocid1.vaultsecret.oc1.iad.<ID of the secrets>"
+    DOCKER_USERNAME_VAULT: "ocid1.vaultsecret.oc1.iad.amaaaaaak56z2vqas5c7nmkun6xlnqwiqpyza47vl3dcqnz3nuedm37ks65q"
+    DOCKER_OCI_AUTH_VAULT: "ocid1.vaultsecret.oc1.iad.amaaaaaak56z2vqabxmvlihncrvm64jlfa3nd7osv6k23a2udnr5fdoe7noa"
 
  
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
     - BUILDRUN_HASH
+    - DOCKER_URL
+    - DOCKER_USERNAME
+    - DOCKER_OCI_AUTH
  
 
 steps:
   - type: Command
-    name: "Define unique image tag"
+    name: "Export Variables"
     timeoutInSeconds: 40
     command: |
       export BUILDRUN_HASH=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
       echo "BUILDRUN_HASH: " $BUILDRUN_HASH
+      DOCKER_URL = ${DOCKER_URL_PARAM}
+      DOCKER_USERNAME = ${DOCKER_USERNAME_VAULT}
+      DOCKER_OCI_AUTH = ${DOCKER_OCI_AUTH_VAULT}
 
   - type: Command
     timeoutInSeconds: 600
@@ -49,7 +55,7 @@ steps:
     timeoutInSeconds: 600
     name: "Maven install"
     command: |
-      cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
+      cd ${OCI_WORKSPACE_DIR}/oci-tomcat-oke-deployment-example-2
       mvn clean install
       mvn package
 
@@ -57,31 +63,19 @@ steps:
     timeoutInSeconds: 600
     name: "Create container image"
     command: |
-      cd ${OCI_WORKSPACE_DIR}/maven-tomcat-example
-      docker build --pull --rm -t maven-tomcat-example .
+      cd ${OCI_WORKSPACE_DIR}/oci-tomcat-oke-deployment-example-2
+      docker build --pull --rm -t oci-tomcat-oke-deployment-example-2 .
   
-  - type: Command                   
-    name: "Login to OCIR"  
-    shell: bash                    
-    timeoutInSeconds: 60           
-    runAs: root          
-    command: |
-      # do docker login
-      echo ${DOCKER_AUTH_TOKEN} | docker login ${DOCKER_REGISTRY} -u ${DOCKER_USERNAME} --password-stdin
-      DOCKER_CONFIG_JSON=`cat ~/.docker/config.json | base64|xargs`
-      
-  # It is not possible to parse any value more than 255 chars between build and deployment pipeline ,so for an easy way it can be used as a file to artifact and call directly from the deployment side. 
-
-
+ 
 outputArtifacts:
   - name: output_java_archive
     type: BINARY
     # built java archive, in case we need it
-    location: ${OCI_WORKSPACE_DIR}/maven-tomcat-example/target/demo.war
+    location: ${OCI_WORKSPACE_DIR}/oci-tomcat-oke-deployment-example-2/target/demo.war
   - name: output_docker_image_tagged
     type: DOCKER_IMAGE
     # this is only the locally exported container image name
     # this location tag doesn't effect the tag used to deliver the container image
     # to the Container Registry.
-    location: maven-tomcat-example:latest
+    location: oci-tomcat-oke-deployment-example-2:latest
   

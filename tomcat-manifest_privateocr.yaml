@@ -1,22 +1,22 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: ${namespace_canary}
+  name: ${NAMESPACE}
 ---
 apiVersion: v1
 kind: Secret
 type: kubernetes.io/dockerconfigjson
 metadata:
-  namespace: ${namespace_canary}
-  name: ocr-credentials
+  name: devops
+  namespace: ${NAMESPACE}
 stringData:
-  .dockerconfigjson: <Base64 of docker config>
+  .dockerconfigjson: '{"auths":{"${DOCKER_URL}":{"username":"${DOCKER_USERNAME}","password":"${OCI_AUTH}","auth":"base64(${DOCKER_USERNAME}:${DOCKER_OCI_AUTH}"}}}'
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tomcat-example-deployment
-  namespace: ${namespace_canary}
+  namespace: ${NAMESPACE}
 spec:
   selector:
     matchLabels:
@@ -36,13 +36,13 @@ spec:
             - containerPort: 8080
               protocol: TCP
       imagePullSecrets:
-        - name: ocr-credentials
+        - name: devops
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: tomcat-example-service
-  namespace: ${namespace_canary}
+  namespace: ${NAMESPACE}
   annotations: 
     service.beta.kubernetes.io/oci-load-balancer-shape: "10Mbps"
 spec:
